@@ -1,0 +1,15 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import '../../public/dist/css/adminlte.min.css';
+
+
+body {
+  height: 100vh !important;
+  min-height: 100vh;
+  scroll-behavior: smooth;
+}
+html {
+  scroll-behavior: smooth;
+}
+#nprogress .bar {
+  z-index: 10000 !important;
+}
