@@ -42,11 +42,13 @@
             <label for="email">Email</label>
             <input id="email" v-model="form.email" type="email" class="mt-1 form-control" required autofocus
               autocomplete="username">
+              <div v-if="form.errors.email" class="text-danger">{{ form.errors.email }}</div>
           </div>
 
           <div class="mt-3">
             <label for="password">Password</label>
             <input id="password" v-model="form.password" type="password" class="mt-1 form-control" required>
+            <div v-if="form.errors.email" class="text-danger">{{ form.errors.password }}</div>
           </div>
 
           <button @click="submit" class="btn btn-primary mt-3" :disabled="form.processing">

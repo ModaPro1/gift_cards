@@ -1,14 +1,13 @@
 <script setup>
   import AppLayout from '@/Layouts/AppLayout.vue';
   import { Link } from '@inertiajs/vue3';
-  import { toast } from 'vue3-toastify';
+  import useToast from '@/hooks/toast.js'
 
   const props = defineProps(['categories', 'successMessage'])
 
+
   if(props.successMessage) {
-    toast.success(props.successMessage, {
-      pauseOnHover: false
-    });
+    useToast('success', props.successMessage)
   }
 </script>
 

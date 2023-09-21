@@ -1,5 +1,18 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+const page = usePage()
+
+function calculateDiff(notification) {
+  if(notification.daysAgo > 0) {
+    return `${notification.daysAgo} ${notification.daysAgo > 1 ? 'days' : 'day'} ago`
+  } else if(notification.hoursAgo > 0) {
+    return notification.hoursAgo + 'hr ago'
+  }else if(notification.minutesAgo > 0) {
+    return notification.minutesAgo + 'min ago'
+  } else {
+    return 'now'
+  }
+}
 </script>
 
 <template>
@@ -16,25 +29,40 @@ import { Link } from '@inertiajs/vue3';
           <li class="nav-item dropdown ml-auto">
             <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
               <i class="far fa-comments"></i>
-              <span class="badge badge-danger navbar-badge">3</span>
+              <span class="badge badge-danger navbar-badge">{{ page.props.notificationsCount }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
-              <a href="#" class="dropdown-item">
-                <!-- Message Start -->
-                <div class="media">
-                  <!-- <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle"> -->
+              <Link
+                :class="{'unseen': !notification.seen}"
+                v-if="page.props.notifications && page.props.notifications.length > 0"
+                v-for="notification in page.props.notificationsData.slice(0, 3)"
+                :href="notification.type == 'order' ? route('admin.order', notification.id) : route('admin.contact', notification.id)"
+                class="dropdown-item position-relative">
+                <div class="media" v-if="notification.type == 'order'">
                   <div class="media-body">
                     <h3 class="dropdown-item-title">
-                      Brad Diesel
-                      <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                      {{ notification.user.name }}
                     </h3>
-                    <p class="text-sm">Call me whenever you can...</p>
-                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                    <p class="text-sm">This User Bought ${{ notification.card.price }} {{ notification.card.name }} Card</p>
+                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> {{ calculateDiff(notification) }}</p>
                   </div>
                 </div>
-                <!-- Message End -->
-              </a>
-              <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                <div class="media" v-else>
+                  <div class="media-body">
+                    <h3 class="dropdown-item-title">
+                      {{ notification.user.name }}
+                    </h3>
+                    <p class="text-sm">Sent you a message, go and check it out</p>
+                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> {{ calculateDiff(notification) }}</p>
+                  </div>
+                </div>
+              </Link>
+              <div v-else class="dropdown-item position-relative">
+                <div class="media-body">
+                  <h3 class="dropdown-item-title">No Notifications Yet.</h3>
+                </div>
+              </div>
+              <Link v-if="page.props.notifications && page.props.notifications.length > 0" :href="route('admin.notifications')" class="dropdown-item dropdown-footer">See All Messages</Link>
             </div>
           </li>
         </ul>
@@ -42,3 +70,25 @@ import { Link } from '@inertiajs/vue3';
     </div>
   </nav>
 </template>
+
+<style scoped>
+  .unseen {
+    position: relative;
+    padding-right: 14px;
+  }
+  .unseen::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    background-color: #0766FF;
+    border-radius: 50%;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .navbar-badge {
+    font-size: 11px;
+  }
+</style>

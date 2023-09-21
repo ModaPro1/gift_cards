@@ -1,13 +1,12 @@
 <script setup>
   import AdminLayout from '@/Layouts/AdminLayout.vue';
   import { Link } from '@inertiajs/vue3';
-  const props = defineProps(['user', 'ordersCount'])
-
+  const props = defineProps(['user', 'ordersCount', 'successMessage'])
 
 </script>
 
 <template>
-  <AdminLayout :title="`Show User (${props.user.id})`">
+  <AdminLayout :successMessage="successMessage" :title="`Show User (${props.user.id})`">
     <div class="bg-white rounded-2 p-2">
       <div class="input-box mb-2">
         <label for="name">Name</label>
@@ -24,7 +23,7 @@
         <b>Orders</b>: {{ props.ordersCount }}
       </div>
       <div class="btns">
-        <button class="btn btn-primary me-2">Edit</button>
+        <Link :href="route('admin.edit', props.user.id)" class="btn btn-primary me-2">Edit</Link>
         <Link :href="route('admin.index')" class="btn btn-secondary">Back</Link>
       </div>
     </div>

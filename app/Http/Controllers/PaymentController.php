@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Card;
 use App\Models\Order;
 use App\Models\User;
+use App\Notifications\AdminNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 use Stripe\Checkout\Session;
 use Stripe\Customer;
@@ -71,6 +74,7 @@ class PaymentController extends Controller
     
     $session = Session::retrieve($request->get('session_id'));
     $order = Order::where('session_id', $session->id)->first();
+    $admins = Admin::all();
 
     if($order && $order->status == 'paid') {
       // order success page seen once and its status is paid
@@ -78,10 +82,8 @@ class PaymentController extends Controller
     } else {
       $order->status = 'paid'; // update order status
       $order->save();
-
-      $user = User::where('id', Auth::id())->first();
-      $user->orders()->attach($order->id);
-
+      // send notification
+      Notification::send($admins, new AdminNotification(auth()->id(), $order->id, null));
       return Inertia::render('PaymentSuccess');
     }
   }

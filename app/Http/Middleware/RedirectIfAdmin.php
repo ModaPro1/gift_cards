@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class checkAdmin
+class RedirectIfAdmin
 {
     /**
      * Handle an incoming request.
@@ -16,8 +16,9 @@ class checkAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if(auth('admin')->check()) {
+          return redirect()->route('admin.index');
+        } else {
           return $next($request);
         }
-        abort(404);
     }
 }

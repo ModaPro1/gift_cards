@@ -26,22 +26,22 @@ import AdminLogo from './AdminLogo.vue'
             </Link>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link" :class="{'active': route().current('admin.contacts')}">
+            <Link :href="route('admin.contacts')" class="nav-link" :class="{'active': route().current('admin.contacts')}">
               <i class="nav-icon fa fa-phone"></i>
               <p>Contacts</p>
-            </a>
+            </Link>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link" :class="{'active': route().current('admin.notifications')}">
+            <Link :href="route('admin.notifications')" class="nav-link" :class="{'active': route().current('admin.notifications')}">
               <i class="nav-icon fa fa-bell"></i>
               <p>Notifications</p>
-            </a>
+            </Link>
           </li>
           <li class="nav-item logout">
-            <a href="#" class="nav-link">
+            <Link as="button" method="POST" :href="route('admin.logout')" class="nav-link">
               <i class="nav-icon fas fa-sign-out-alt"></i>
               <p>Logout</p>
-            </a>
+            </Link>
           </li>
         </ul>
       </nav>
@@ -50,7 +50,11 @@ import AdminLogo from './AdminLogo.vue'
 </template>
 
 <style scoped>
-.logout:hover a {
+.logout button {
+  text-align: left;
+  color: #c2c7d0;
+}
+.logout:hover button {
   background-color: var(--danger) !important;
 }
 </style>

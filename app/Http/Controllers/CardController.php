@@ -13,50 +13,6 @@ use Inertia\Inertia;
 class CardController extends Controller
 {
   public function index() {
-    function generateCats() {
-      $catsData = [
-        [
-          'name' => 'Pubg',
-          'url' => '/pubg',
-          'image' => 'pubg.webp'
-        ],
-        [
-          'name' => 'Roblox',
-          'url' => '/roblox',
-          'image' => 'roblox.webp'
-        ],
-        [
-          'name' => 'Razer',
-          'url' => '/razer',
-          'image' => 'razer.webp'
-        ],
-        [
-          'name' => 'Google Play',
-          'url' => '/googleplay',
-          'image' => 'google-play.webp'
-        ],
-        [
-          'name' => 'Steam',
-          'url' => '/steam',
-          'image' => 'steam.webp'
-        ],
-        [
-          'name' => 'Amazon',
-          'url' => '/amazon',
-          'image' => 'amazon.webp'
-        ],
-      ];
-
-      foreach($catsData as $cat) {
-        Category::create([
-          'name' => $cat['name'],
-          'image' => $cat['image'],
-          'url' => $cat['url']
-        ]);
-      }
-    }
-    // generateCats();
-
     $successMessage = '';
     if(session('success')) {
       $successMessage = session('success');
@@ -75,98 +31,6 @@ class CardController extends Controller
   }
 
   public function allCards() {
-    function generateCards() {
-      $cardsData = [
-        [
-          'name' => 'Google Play',
-          'type' => 'googleplay',
-          'image' => 'google-play.webp',
-          'price' => 5
-        ],
-        [
-          'name' => 'Google Play',
-          'type' => 'googleplay',
-          'image' => 'google-play.webp',
-          'price' => 10
-        ],
-        [
-          'name' => 'Google Play',
-          'type' => 'googleplay',
-          'image' => 'google-play.webp',
-          'price' => 15
-        ],
-        [
-          'name' => 'Google Play',
-          'type' => 'googleplay',
-          'image' => 'google-play.webp',
-          'price' => 20
-        ],
-        [
-          'name' => 'Pubg Mobile',
-          'type' => 'pubg',
-          'image' => 'pubg.webp',
-          'price' => 5
-        ],
-        [
-          'name' => 'Pubg Mobile',
-          'type' => 'pubg',
-          'image' => 'pubg.webp',
-          'price' => 10
-        ],
-        [
-          'name' => 'Pubg Mobile',
-          'type' => 'pubg',
-          'image' => 'pubg.webp',
-          'price' => 15
-        ],
-        [
-          'name' => 'Pubg Mobile',
-          'type' => 'pubg',
-          'image' => 'pubg.webp',
-          'price' => 20
-        ],
-        [
-          'name' => 'Roblox',
-          'type' => 'roblox',
-          'image' => 'roblox.webp',
-          'price' => 1
-        ],
-        [
-          'name' => 'Roblox',
-          'type' => 'roblox',
-          'image' => 'roblox.webp',
-          'price' => 5
-        ],
-        [
-          'name' => 'Roblox',
-          'type' => 'roblox',
-          'image' => 'roblox.webp',
-          'price' => 10
-        ],
-        [
-          'name' => 'Roblox',
-          'type' => 'roblox',
-          'image' => 'roblox.webp',
-          'price' => 15
-        ],
-        [
-          'name' => 'Roblox',
-          'type' => 'roblox',
-          'image' => 'roblox.webp',
-          'price' => 20
-        ],
-      ];
-      foreach($cardsData as $card) {
-        Card::create([
-          'name' => $card['name'],
-          'type' => $card['type'],
-          'image' => $card['image'],
-          'price' => $card['price']
-        ]);
-      }
-    }
-    // generateCards();
-
     return Inertia::render('Cards/Cards', [
       'cards' => Card::all()
     ]);
@@ -198,6 +62,7 @@ class CardController extends Controller
       array_push($finalOutput, [
         "card_details" => $card,
         "order_status" => $order->status,
+        "card_code" => $order->card_code,
         "order_date" => date_format($order->created_at, 'Y-m-d h:i')
       ]);
     }

@@ -6,6 +6,7 @@
   import { toast } from 'vue3-toastify';
   import PrimaryButton from './PrimaryButton.vue';
   import axios from 'axios';
+  import useToast from '@/hooks/toast.js'
 
   const props = defineProps(['name', 'data']);
   const page = usePage()
@@ -23,9 +24,7 @@
   function cardClick(id, name, price) {
     if(!user.value) {
       // user not logged in
-      toast.error('Please Login First.', {
-        pauseOnHover: false
-      });
+      useToast('error', 'Please login first.')
     } else {
       // user logged in
       confirmModal.value = true

@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->string('session_id');
-            $table->string('card_id');
-            $table->string('user_id');
             $table->string('status');
+            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreignId('card_id')->references('id')->on('cards')->cascadeOnDelete();
+            $table->string('card_code')->nullable();
+            $table->string('comment')->nullable();
             $table->timestamps();
         });
     }

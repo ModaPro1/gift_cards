@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Card;
-use App\Models\Category;
+use App\Models\Admin;
 use App\Models\ContactRequest;
+use App\Notifications\AdminNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
 
 class UserController extends Controller
@@ -25,11 +26,14 @@ class UserController extends Controller
         'message' => 'required|min:10|max:255'
       ]);
 
-      ContactRequest::create([
+      $contact = ContactRequest::create([
         'user_name' => $request->name,
         'user_email' => $request->email,
         'message' => $request->message,
       ]);
+
+      $admins = Admin::all();
+      Notification::send($admins, new AdminNotification(auth()->id(), null, $contact->id));
 
       return redirect('/')->with('success', 'Message Successfully Sent !');
     }

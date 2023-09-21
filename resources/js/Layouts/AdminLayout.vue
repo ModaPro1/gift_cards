@@ -1,13 +1,12 @@
 <script setup>
 
   import { Head } from '@inertiajs/vue3';
+  import Swal from 'sweetalert2';
   import { InertiaProgress } from '@inertiajs/progress'
   import AdminSidebar from '@/Components/AdminSidebar.vue'
   import AdminNavbar from '@/Components/AdminNavbar.vue'
   import '@/../css/admin.css' // AdminLTE CSS
   import '@/admin.js' // AdminLTE CSS
-
-
   const props = defineProps(['title'])
 
   InertiaProgress.init({
@@ -22,7 +21,6 @@
   }
   handleResize()
   window.addEventListener('resize', handleResize)
-
 </script>
 
 <template>
@@ -34,7 +32,7 @@
       <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
     </Head>
     <div class="wrapper">
-      <AdminNavbar />
+      <AdminNavbar/>
       <AdminSidebar/>
 
       <div class="content-wrapper">
@@ -62,5 +60,8 @@
 .content-wrapper {
   min-height: calc(100vh - 57px) !important;
   padding-bottom: 10px;
+}
+.swal2-title {
+  font-weight: 400;
 }
 </style>

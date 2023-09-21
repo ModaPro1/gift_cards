@@ -1,11 +1,64 @@
 <script setup>
   import AdminLayout from '@/Layouts/AdminLayout.vue';
-  import { Link } from '@inertiajs/vue3';
-  import { ref } from 'vue';
+  import { Link, useForm } from '@inertiajs/vue3';
+  import { ref, watch } from 'vue';
+  import { throttle } from "lodash";
+  import Swal from 'sweetalert2';
 
-  const props = defineProps(['users', 'usersCount', 'ordersCount', 'contactCount'])
-  const links = ref(props.users.links)
+  const props = defineProps(['users', 'usersCount', 'ordersCount', 'contactCount', 'searchVal'])
+  const searchVal = ref(props.searchVal || '')
+  const searchForm = useForm({
+    search: ''
+  })
+  const deleteForm = useForm({})
+
+  // Define the throttled search function here
+  const thr = throttle(() => {
+    searchForm.search = searchVal.value
+    searchForm.get(route('admin.index'), {
+      preserveState: true,
+    })
+  }, 1000)
+
+  // Call the throttled search function when the input value changes
+  watch(searchVal, thr)
+
+  function deleteUser(id) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Do this if you want to delete this user.",
+      icon: 'warning',
+      showCancelButton: true, 
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Delete user'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteForm.post(route('admin.delete', id), {
+          onFinish() {
+            const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+              }
+            })
+            Toast.fire({
+              icon: 'success',
+              title: "User successfully deleted."
+            })
+          }
+        })
+      }
+    })
+  }
+
 </script>
+
 
 <template>
   <AdminLayout title="Main Page">
@@ -34,7 +87,7 @@
             <i class="fas fa-shopping-cart"></i>
           </div>
           <Link :href="route('admin.orders')" class="small-box-footer">
-            More info <i class="fas fa-arrow-circle-right"></i>
+          More info <i class="fas fa-arrow-circle-right"></i>
           </Link>
         </div>
       </div>
@@ -47,8 +100,8 @@
           <div class="icon">
             <i class="fas fa-phone"></i>
           </div>
-          <Link href="#" class="small-box-footer">
-            More info <i class="fas fa-arrow-circle-right"></i>
+          <Link :href="route('admin.contacts')" class="small-box-footer">
+          More info <i class="fas fa-arrow-circle-right"></i>
           </Link>
         </div>
       </div>
@@ -70,14 +123,18 @@
           <table class="table table-striped projects">
             <thead>
               <tr>
-                <th>
+                <th style="width: 5%;">
                   ID
                 </th>
-                <th>
+                <th style="width: 20%;">
                   User Name
                 </th>
-                <th>
+                <th style="width: 30%;">
                   User Email
+                </th>
+                <th>
+                  <input type="search" placeholder="Search for user..." v-model="searchVal" @input="search"
+                    class="form-control">
                 </th>
               </tr>
             </thead>
@@ -88,17 +145,17 @@
                 <td>{{ user.email }}</td>
                 <td class="project-actions text-right">
                   <Link class="btn btn-primary btn-sm mr-1" :href="route('admin.user', user.id)">
-                    <i class="fas fa-folder mr-1"></i>
-                    View
+                  <i class="fas fa-folder mr-1"></i>
+                  View
                   </Link>
-                  <Link class="btn btn-info btn-sm mr-1 text-white" :href="route('admin.editUser', user.id)">
-                    <i class="fas fa-pencil-alt mr-1"></i>
-                    Edit
+                  <Link class="btn btn-info btn-sm mr-1 text-white" :href="route('admin.edit', user.id)">
+                  <i class="fas fa-pencil-alt mr-1"></i>
+                  Edit
                   </Link>
-                  <a class="btn btn-danger btn-sm" href="#">
+                  <button @click="deleteUser(user.id)" class="btn btn-danger btn-sm" href="#">
                     <i class="fas fa-trash mr-1"></i>
                     Delete
-                  </a>
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -107,21 +164,12 @@
       </div>
       <div class="footer p-3 bg-grey d-flex justify-content-between flex-wrap">
         <button class="btn btn-outline-primary">Add New User</button>
-        <div v-if="links.length > 3">
+        <div v-if="props.users.links.length > 3">
           <ul class="pagination m-0 ml-auto">
-            <li class="page-item" v-for="link in links" :class="{active: link.active, disabled: link.url == null}">
-              <a
-                v-if="link.url === null"
-                class="page-link"
-                v-html="link.label"
-              ></a>
-              <Link
-                v-else
-                class="page-link"
-                :href="link.url"
-                v-html="link.label"
-                preserve-scroll
-                ></Link>
+            <li class="page-item" v-for="link in props.users.links" :class="{ active: link.active, disabled: link.url == null }">
+              <a v-if="link.url === null" class="page-link" v-html="link.label"></a>
+              <Link v-else class="page-link" :href="link.url" v-html="link.label" preserve-scroll>
+              </Link>
             </li>
           </ul>
         </div>
@@ -131,11 +179,12 @@
 </template>
 
 <style scoped>
-  td {
-    white-space: nowrap;
-  }
-  .footer {
-    border-top: 1px solid #c1c1c1;
-    gap: 10px;
-  }
+td {
+  white-space: nowrap;
+}
+
+.footer {
+  border-top: 1px solid #c1c1c1;
+  gap: 10px;
+}
 </style>

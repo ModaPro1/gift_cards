@@ -1,7 +1,29 @@
 <script setup>
   import AppLayout from '@/Layouts/AppLayout.vue';
+import useToast from '@/hooks/toast';
   const props = defineProps(['orders'])
 
+  function copyCard(card_code) {
+     // Create a temporary input element to hold the text
+      const tempInput = document.createElement('input');
+      tempInput.value = card_code;
+
+      // Append the input element to the document
+      document.body.appendChild(tempInput);
+
+      // Select the text in the input element
+      tempInput.select();
+      tempInput.setSelectionRange(0, 99999); // For mobile devices
+
+      // Copy the selected text to the clipboard
+      document.execCommand('copy');
+
+      // Remove the temporary input element
+      document.body.removeChild(tempInput);
+
+      // Show a confirmation message to the user (you can use a toast or alert)
+      useToast('info', 'Copied to clipboard.')
+  }
 </script>
 
 <template>
@@ -33,7 +55,7 @@
                 Your card has successfully <b class="text-green-500">recieved</b>, Card Code:
               </p>
               <p v-if="order.order_status == 'recieved'">
-                5185-2383-1923-5912
+                {{ order.card_code }} <span class="underline cursor-pointer text-blue-500" @click="copyCard(order.card_code)">Copy</span>
               </p>
               <p v-if="order.order_status == 'refused'">
                 Your card purchase has <b class="text-red-500">refused</b> due to some circumstances, please contact us for more info.

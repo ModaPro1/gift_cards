@@ -4,21 +4,12 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
+use App\Models\Admin;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-Route::get('/', [CardController::class, 'index'])->name('dashboard');
+Route::get('/', [CardController::class, 'index'])
+->middleware('admin_guest')
+->name('dashboard');
 
 Route::get('/cards', [CardController::class, 'allCards'])->name('cards');
 Route::get('/cards/{type}', [CardController::class, 'singleCard']);
@@ -31,16 +22,32 @@ Route::middleware('auth')->group(function() {
   Route::get('/orders', [CardController::class, 'showOrders'])->name('orders');
 });
 
-Route::get('/admin/login', [AdminController::class, 'showLogin'])
-->middleware('guest')
-->name('admin.login');
+Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'login']);
 
-Route::middleware('check_admin')->group(function() {
-  Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-  Route::get('/admin/user/{id}', [AdminController::class, 'showUser'])->name('admin.user');
-  Route::get('/admin/user/{id}/edit', [AdminController::class, 'showEditUser'])->name('admin.editUser');
-  Route::post('/admin/user/{id}/edit', [AdminController::class, 'editUser']);
+Route::middleware('check_admin')->prefix('/admin')->group(function() {
+  // CRUD
+  Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+  Route::get('/user/{id}', [AdminController::class, 'showUser'])->name('admin.user');
+  Route::get('/user/{id}/edit', [AdminController::class, 'showEditUser'])->name('admin.edit');
+  Route::post('/user/{id}/edit', [AdminController::class, 'editUser']);
+  Route::post('/user/{id}/delete', [AdminController::class, 'deleteUser'])->name('admin.delete');
+  
+  // Orders & Cards
+  Route::get('/orders', [AdminController::class, 'showOrders'])->name('admin.orders');
+  Route::get('/orders/{notificationId}', [AdminController::class, 'showOrder'])->name('admin.order');
+  Route::post('/orders/refuse', [AdminController::class, 'refuseOrder'])->name('admin.refuseCard');
+  Route::post('/orders/send', [AdminController::class, 'sendCard'])->name('admin.sendCard');
 
-  Route::get('/admin/orders', [AdminController::class, 'showOrders'])->name('admin.orders');
+  // Contacts
+  Route::get('/contacts', [AdminController::class, 'showContacts'])->name('admin.contacts');
+  Route::get('/contacts/{id}', [AdminController::class, 'showContact'])->name('admin.contact');
+
+  // Notifications
+  Route::get('/notifications', [AdminController::class, 'showNotifications'])->name('admin.notifications');
+
+  // Others
+  Route::get('/search', [AdminController::class, 'search'])->name('admin.search');
+  Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
+
 });
