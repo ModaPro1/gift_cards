@@ -129,12 +129,14 @@ export default {
           <p v-if="order.order_status == 'recieved'">Order has <span class="text-success">successfully recieved</span> and
             the card code is <b class="text-black">{{ order.card_code }}</b></p>
           <div v-if="order.order_status != 'recieved'" class="input-box d-flex gap-2">
-            <input
-              class="form-control card-input"
+            <div style="flex: 1;">
+              <input
+              class="form-control w-100"
               :class="{ 'is-invalid': this.sendFormsInvalid.includes(order.order_id) }"
               placeholder="Card Code"
               :ref="`input-${order.order_id}`"
               >
+            </div>
             <button class="btn btn-primary" @click="sendCard(order.order_id, order.order_status)">Send</button>
             <button v-if="order.order_status != 'refused'" class="btn btn-danger"
               @click="refuseCard(order.order_id)">Refuse</button>
@@ -169,8 +171,4 @@ export default {
   background-color: #DC2626;
 }
 
-.card-input {
-  width: 400px;
-  max-width: 400px;
-}
 </style>

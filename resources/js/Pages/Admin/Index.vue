@@ -163,7 +163,10 @@
         </div>
       </div>
       <div class="footer p-3 bg-grey d-flex justify-content-between flex-wrap">
-        <button class="btn btn-outline-primary">Add New User</button>
+        <button class="btn btn-outline-primary">
+          <i class="fas fa-user-plus me-1"></i>
+          Add
+        </button>
         <div v-if="props.users.links.length > 3">
           <ul class="pagination m-0 ml-auto">
             <li class="page-item" v-for="link in props.users.links" :class="{ active: link.active, disabled: link.url == null }">

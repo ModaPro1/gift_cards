@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Admin;
 use App\Models\Card;
+use App\Models\Category;
 use App\Models\ContactRequest;
 use App\Models\Notification;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Inertia\Inertia;
 
 class AdminController extends Controller
@@ -91,6 +91,111 @@ class AdminController extends Controller
       $user = User::findOrFail($id);
       $user->delete();
       return redirect()->route('admin.index')->with('success', 'User Deleted Successfully.');
+    }
+
+    // Cards
+    public function showCards() {
+      $categories = Category::all();
+      $finalOutput = [];
+
+      foreach($categories as $category) {
+        array_push($finalOutput, [
+          'id' => $category->id,
+          'category_name' => $category->name,
+          'cards' => $category->cards
+        ]);
+      }
+
+      return Inertia::render('Admin/Cards/Cards', [
+        'cats' => $finalOutput,
+        'success' => session('success') ? session('success') : false
+      ]);
+    }
+
+    public function changeCategoryName(Request $request) {
+      $cat = Category::find($request->id);
+      $cat->update([
+        'name' => $request->value
+      ]);
+    }
+
+    public function showEditCard($id) {
+      $card = Card::findOrFail($id);
+      $success = false;
+
+      return Inertia::render('Admin/Cards/EditCard', compact('card', 'success'));
+    }
+
+    public function editCard(Request $request, $id) {
+      $request->validate([
+        'name' => 'required',
+        'price' => 'required',
+      ]);
+
+      $card = Card::find($id);
+
+      if(!$card) {
+        return redirect()->back()->withErrors('There was an error');
+      }
+
+      // Update Image
+      if($request->image) {
+        $request->image->move(public_path('images/small'), "$card->id.webp");
+        $card->update([
+          'image' => "$card->id.webp"
+        ]);
+      }
+
+      // Update Data
+      $card->update([
+        'name' => $request->name,
+        'price' => $request->price
+      ]);
+
+      return redirect()->route('admin.cards')->with('success', 'Successfully Edited.');
+
+    }
+
+    public function showAddCard() {
+      $cats = Category::all();
+      return Inertia::render('Admin/Cards/AddCard', compact('cats'));
+    }
+
+    public function addCard(Request $request) {
+      $request->validate([
+        'category' => 'required',
+        'name' => 'required',
+        'price' => 'required',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048'
+      ]);
+
+      $cat = Category::where('name', $request->category)->first();
+      
+      if(!$cat) {
+        return;
+      }
+      
+      if(!count($cat->cards) > 0 && !$request->image) { // there is no cards for this category and no image added
+        return redirect()->back()->withErrors(['image' => 'Please add image as this category has no images yet.']);
+      }
+
+      $card = Card::create([
+        'name' => $request->name,
+        'price' => $request->price,
+        'image' => count($cat->cards) > 0 ?  $cat->cards[0]->image : $request->image, // get image of first card using this category
+        'category_id' => $cat->id,
+        'type' => str_replace('/', '', $cat->url),
+      ]);
+
+      // Add Image if exists
+      if($request->image) {
+        $request->image->move(public_path('images/small'), "$card->id.webp");
+        $card->update([
+          'image' => "$card->id.webp"
+        ]);
+      }
+
+      return redirect()->route('admin.cards')->with('success', 'Card Added Successfully.');
     }
 
     // Orders

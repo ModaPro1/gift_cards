@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         // Create Categories
         $catsData = [
           [
-            'name' => 'Pubg',
+            'name' => 'Pubg Mobile',
             'url' => '/pubg',
             'image' => 'pubg.webp'
           ],
@@ -78,79 +78,92 @@ class DatabaseSeeder extends Seeder
             'name' => 'Google Play',
             'type' => 'googleplay',
             'image' => 'google-play.webp',
-            'price' => 5
+            'price' => 5,
+            'category_id' => 4
           ],
           [
             'name' => 'Google Play',
             'type' => 'googleplay',
             'image' => 'google-play.webp',
-            'price' => 10
+            'price' => 10,
+            'category_id' => 4
           ],
           [
             'name' => 'Google Play',
             'type' => 'googleplay',
             'image' => 'google-play.webp',
-            'price' => 15
+            'price' => 15,
+            'category_id' => 4
           ],
           [
             'name' => 'Google Play',
             'type' => 'googleplay',
             'image' => 'google-play.webp',
-            'price' => 20
+            'price' => 20,
+            'category_id' => 4
           ],
           [
             'name' => 'Pubg Mobile',
             'type' => 'pubg',
             'image' => 'pubg.webp',
-            'price' => 5
+            'price' => 5,
+            'category_id' => 1
           ],
           [
             'name' => 'Pubg Mobile',
             'type' => 'pubg',
             'image' => 'pubg.webp',
-            'price' => 10
+            'price' => 10,
+            'category_id' => 1
           ],
           [
             'name' => 'Pubg Mobile',
             'type' => 'pubg',
             'image' => 'pubg.webp',
-            'price' => 15
+            'price' => 15,
+            'category_id' => 1
           ],
           [
             'name' => 'Pubg Mobile',
             'type' => 'pubg',
             'image' => 'pubg.webp',
-            'price' => 20
+            'price' => 20,
+            'category_id' => 1
           ],
           [
             'name' => 'Roblox',
             'type' => 'roblox',
             'image' => 'roblox.webp',
-            'price' => 1
+            'price' => 1,
+            'category_id' => 2
           ],
           [
             'name' => 'Roblox',
             'type' => 'roblox',
             'image' => 'roblox.webp',
-            'price' => 5
+            'price' => 5,
+            'category_id' => 2
           ],
           [
             'name' => 'Roblox',
             'type' => 'roblox',
             'image' => 'roblox.webp',
-            'price' => 10
+            'price' => 10,
+            'category_id' => 2
           ],
           [
             'name' => 'Roblox',
             'type' => 'roblox',
             'image' => 'roblox.webp',
-            'price' => 15
+            'price' => 15,
+            'category_id' => 2
           ],
           [
             'name' => 'Roblox',
             'type' => 'roblox',
             'image' => 'roblox.webp',
-            'price' => 20
+            'price' => 20,
+            'category_id' => 2
           ],
         ];
         foreach($cardsData as $card) {
@@ -158,7 +171,8 @@ class DatabaseSeeder extends Seeder
             'name' => $card['name'],
             'type' => $card['type'],
             'image' => $card['image'],
-            'price' => $card['price']
+            'price' => $card['price'],
+            'category_id' => $card['category_id']
           ]);
         }
     }

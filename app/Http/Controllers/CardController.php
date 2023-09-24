@@ -31,25 +31,33 @@ class CardController extends Controller
   }
 
   public function allCards() {
+    $categories = Category::all();
+    $finalOutput = [];
+
+    foreach($categories as $category) {
+      array_push($finalOutput, [
+        'id' => $category->id,
+        'category_name' => $category->name,
+        'cards' => $category->cards
+      ]);
+    }
+
     return Inertia::render('Cards/Cards', [
-      'cards' => Card::all()
+      'cards' => $finalOutput
     ]);
   }
 
   public function singleCard($type) {
-    $supportedCardsTypes = Card::select('type')->get();
-    $supportedCards = [];
-    foreach($supportedCardsTypes as $card) {
-      array_push($supportedCards, $card->type);
-    }
+    $category = Category::where('url', "/$type")->first();
+    $cards = [
+      'id' => $category->id,
+      'category_name' => $category->name,
+      'cards' => $category->cards
+    ];
 
-    if(in_array($type, $supportedCards)) {
-      return Inertia::render('Cards/Cards', [
-        'cards' => Card::where('type', $type)->get()
-      ]);
-    }else {
-      abort(404);
-    }
+    return Inertia::render('Cards/Cards', [
+      'cards' => $cards
+    ]);
 
   }
 

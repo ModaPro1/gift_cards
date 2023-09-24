@@ -33,7 +33,15 @@ Route::middleware('check_admin')->prefix('/admin')->group(function() {
   Route::post('/user/{id}/edit', [AdminController::class, 'editUser']);
   Route::post('/user/{id}/delete', [AdminController::class, 'deleteUser'])->name('admin.delete');
   
-  // Orders & Cards
+  // Cards
+  Route::get('/cards', [AdminController::class, 'showCards'])->name('admin.cards');
+  Route::post('/cards/changeCategory', [AdminController::class, 'changeCategoryName'])->name('admin.changeCategoryName');
+  Route::get('/card/{id}', [AdminController::class, 'showEditCard'])->name('admin.editCard');
+  Route::post('/card/{id}', [AdminController::class, 'editCard']);
+  Route::get('/cards/add', [AdminController::class, 'showAddCard'])->name('admin.addCard');
+  Route::post('/cards/add', [AdminController::class, 'addCard']);
+
+  // Orders
   Route::get('/orders', [AdminController::class, 'showOrders'])->name('admin.orders');
   Route::get('/orders/{notificationId}', [AdminController::class, 'showOrder'])->name('admin.order');
   Route::post('/orders/refuse', [AdminController::class, 'refuseOrder'])->name('admin.refuseCard');

@@ -39,9 +39,9 @@
   })
 
   const priceClass = computed(() => {
-    if(props.name == 'pubg mobile') {
+    if(props.name == 'Pubg Mobile') {
       return 'text-white'
-    }else if(props.name == 'roblox') {
+    }else if(props.name == 'ROBLOX') {
       return 'text-red-500'
     }else {
       return ''
@@ -57,7 +57,6 @@
     })
     .then(data => {
       window.location.href = data.data.redirect
-      // console.log(data);
     })
   }
 </script>
@@ -65,13 +64,14 @@
 <template>
   <section>
     <h3 class="text-gray-400 uppercase text-xl text-space tracking-widest">{{ props.name }}</h3>
-    <div class="cat" v-for="cat in props.data">
+    <div v-if="props.data && props.data.length > 0" class="cat" v-for="cat in props.data">
       <button @click="cardClick(cat.id, cat.name, cat.price)" class="bg-white rounded-xl shadow-xl text-center">
         <div :class="priceClass" class="price">${{ cat.price }}</div>
         <img :src="`/images/small/${cat.image}`" class="w-100">
         <p class="text-gray-500 uppercase text-center">{{ cat.name }}</p>
       </button>
     </div>
+    <div v-else>No Cards For This Category Yet.</div>
   </section>
 
   <DialogModal :show="confirmModal" @close="confirmModal = false">

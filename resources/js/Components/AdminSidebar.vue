@@ -20,6 +20,12 @@ import AdminLogo from './AdminLogo.vue'
             </Link>
           </li>
           <li class="nav-item">
+            <Link :href="route('admin.cards')" class="nav-link" :class="{'active': route().current('admin.cards')}">
+              <i class="nav-icon far fa-credit-card"></i>
+              <p>Manage Cards</p>
+            </Link>
+          </li>
+          <li class="nav-item">
             <Link :href="route('admin.orders')" class="nav-link" :class="{'active': route().current('admin.orders')}">
               <i class="nav-icon fa fa-shopping-cart"></i>
               <p>Orders</p>
