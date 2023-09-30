@@ -1,3 +1,2 @@
-import '@/../../public/plugins/jquery/jquery.min.js' // JQuery
-import '@/../../public/plugins/bootstrap/js/bootstrap.bundle.min.js' // Bootstrap
-import '@/../../public/dist/js/adminlte.min.js' // AdminLTE
+import 'admin-lte/plugins/bootstrap/js/bootstrap.min.js';
+import 'admin-lte/dist/js/adminlte.min.js';

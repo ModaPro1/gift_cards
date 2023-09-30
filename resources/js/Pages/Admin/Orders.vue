@@ -47,7 +47,7 @@ export default {
           if (res.isConfirmed) {
             this.$inertia.post(route('admin.sendCard'), {order_id, card_code}, {
               onFinish() {
-                useToast('success', 'Order Successfully Refused.')
+                useToast('success', 'Card Successfully Sent.')
               },
               onError() {
                 useToast('error', 'There was an error while sending card.')
@@ -66,7 +66,7 @@ export default {
           if (res.isConfirmed) {
             this.$inertia.post(route('admin.sendCard'), {order_id, card_code}, {
               onFinish() {
-                useToast('success', 'Order Successfully Refused.')
+                useToast('success', 'Card Successfully Sent.')
               },
               onError() {
                 useToast('error', 'There was an error while sending card.')

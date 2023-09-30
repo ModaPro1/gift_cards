@@ -1,16 +1,14 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { useForm } from '@inertiajs/vue3';
-const props = defineProps(['cats'])
 const form = useForm({
   name: '',
-  price: '',
-  image: '',
-  category: props.cats[0].name
+  url: '',
+  image: ''
 })
 
 const submit = () => {
-  form.post(route('admin.addCard'))
+  form.post(route('admin.addCat'))
 }
 </script>
 
@@ -20,36 +18,32 @@ const submit = () => {
       <div class="row">
         <div class="col-lg-6">
           <div class="input-box">
-            <label for="name">Card Name</label>
+            <label for="name">Category Name</label>
             <input id="name" v-model="form.name" type="text" class="form-control" />
             <div v-if="form.errors.name" class="text-danger">{{ form.errors.name }}</div>
           </div>
         </div>
         <div class="col-lg-6">
           <div class="input-box">
-            <label for="price">Card Price</label>
-            <input id="price" v-model="form.price" type="number" class="form-control" />
-            <div v-if="form.errors.price" class="text-danger">{{ form.errors.price }}</div>
+            <label for="url">Category URL</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">/</div>
+              </div>
+              <input id="url" v-model="form.url" type="text" class="form-control" />
+            </div>
+            <div v-if="form.errors.url" class="text-danger">{{ form.errors.url }}</div>
           </div>
         </div>
         <div class="col-lg-12">
           <div class="input-box mt-2">
-            <label for="file">Card Image (Optional)</label>
+            <label for="file">Default Image</label>
             <input id="file" @input="(e) => form.image = e.target.files[0]" type="file" class="form-control" />
             <div v-if="form.errors.image" class="text-danger">{{ form.errors.image }}</div>
           </div>
         </div>
-        <div class="col-lg-12">
-          <div class="input-box mt-2">
-            <label for="cat">Category</label>
-            <select v-model="form.category" id="cat" class="form-select">
-              <option v-for="cat in cats" :value="cat.name">{{ cat.name }}</option>
-            </select>
-            <div v-if="form.errors.category" class="text-danger">{{ form.errors.category }}</div>
-          </div>
-        </div>
       </div>
-      <button class="btn btn-success mt-3" @click="submit">Add Card</button>
+      <button class="btn btn-success mt-3" @click="submit">Add Category</button>
     </div>
   </AdminLayout>
 </template>

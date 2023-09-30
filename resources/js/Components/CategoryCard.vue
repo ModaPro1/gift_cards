@@ -39,12 +39,12 @@
   })
 
   const priceClass = computed(() => {
-    if(props.name == 'Pubg Mobile') {
-      return 'text-white'
-    }else if(props.name == 'ROBLOX') {
+    if(props.name == 'Google Play') {
+      return 'text-black'
+    }else if(props.name == 'Roblox') {
       return 'text-red-500'
     }else {
-      return ''
+      return 'text-white'
     }
   })
 
@@ -67,7 +67,7 @@
     <div v-if="props.data && props.data.length > 0" class="cat" v-for="cat in props.data">
       <button @click="cardClick(cat.id, cat.name, cat.price)" class="bg-white rounded-xl shadow-xl text-center">
         <div :class="priceClass" class="price">${{ cat.price }}</div>
-        <img :src="`/images/small/${cat.image}`" class="w-100">
+        <img :src="`/images/small/${cat.image}`" width="120" height="150" alt="Card Image">
         <p class="text-gray-500 uppercase text-center">{{ cat.name }}</p>
       </button>
     </div>
@@ -120,7 +120,7 @@
 }
 
 .cats .cat {
-  width: 150px;
+  width: fit-content;
   display: inline-block;
   position: relative;
 }
@@ -136,8 +136,9 @@
   transform: scale(1.1);
 }
 
-.cats .cat button img {
-  width: 100%;
+.cats .cat img {
+  width: 120px;
+  height: 150px;
   margin-bottom: 5px;
 }
 

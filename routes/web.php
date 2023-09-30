@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\CardsController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserController;
-use App\Models\Admin;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [CardController::class, 'index'])
@@ -34,12 +34,16 @@ Route::middleware('check_admin')->prefix('/admin')->group(function() {
   Route::post('/user/{id}/delete', [AdminController::class, 'deleteUser'])->name('admin.delete');
   
   // Cards
-  Route::get('/cards', [AdminController::class, 'showCards'])->name('admin.cards');
-  Route::post('/cards/changeCategory', [AdminController::class, 'changeCategoryName'])->name('admin.changeCategoryName');
-  Route::get('/card/{id}', [AdminController::class, 'showEditCard'])->name('admin.editCard');
-  Route::post('/card/{id}', [AdminController::class, 'editCard']);
-  Route::get('/cards/add', [AdminController::class, 'showAddCard'])->name('admin.addCard');
-  Route::post('/cards/add', [AdminController::class, 'addCard']);
+  Route::get('/cards', [CardsController::class, 'showCards'])->name('admin.cards');
+  Route::post('/cards/changeCategory', [CardsController::class, 'changeCategoryName'])->name('admin.changeCategoryName');
+  Route::get('/card/{id}', [CardsController::class, 'showEditCard'])->name('admin.editCard');
+  Route::post('/card/{id}', [CardsController::class, 'editCard']);
+  Route::get('/cards/add', [CardsController::class, 'showAddCard'])->name('admin.addCard');
+  Route::post('/cards/add', [CardsController::class, 'addCard']);
+  Route::post('/cards/delete', [CardsController::class, 'deleteCard'])->name('admin.deleteCard');
+  Route::get('/category/add', [CardsController::class, 'showAddCat'])->name('admin.showAddCat');
+  Route::post('/category/add', [CardsController::class, 'addCat'])->name('admin.addCat');
+  Route::post('/category/delete', [CardsController::class, 'deleteCat'])->name('admin.deleteCat');
 
   // Orders
   Route::get('/orders', [AdminController::class, 'showOrders'])->name('admin.orders');
@@ -57,5 +61,7 @@ Route::middleware('check_admin')->prefix('/admin')->group(function() {
   // Others
   Route::get('/search', [AdminController::class, 'search'])->name('admin.search');
   Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
+  Route::get('/add-user', [AdminController::class, 'showAddUser'])->name('admin.addUser');
+  Route::post('/add-user', [AdminController::class, 'addUser']);
 
 });

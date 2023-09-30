@@ -18,7 +18,7 @@ function calculateDiff(notification) {
 
 <template>
   <AdminLayout title="Notifications">
-    <div v-for="notification in page.props.notificationsData" class="bg-white p-3 rounded-3 mb-3" :class="{'seen': !notification.seen}">
+    <div v-if="page.props.notificationsData && page.props.notificationsData.length > 0" v-for="notification in page.props.notificationsData" class="bg-white p-3 rounded-3 mb-3" :class="{'seen': !notification.seen}">
       <div class="d-flex justify-content-between">
         <div v-if="notification.type == 'order'">
           User <Link :href="route('admin.user', notification.user.id)">{{ notification.user.name }}</Link> Bought a ${{ notification.card.price }} {{ notification.card.name }} Card, <Link :href="route('admin.order', notification.id)">Check the order</Link>
@@ -28,6 +28,9 @@ function calculateDiff(notification) {
         </div>
         <div class="text-muted">{{ calculateDiff(notification) }}</div>
       </div>
+    </div>
+    <div v-else>
+      No Notifications Yet.
     </div>
   </AdminLayout>
 </template>

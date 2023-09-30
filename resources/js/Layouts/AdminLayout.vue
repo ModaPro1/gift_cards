@@ -1,12 +1,12 @@
 <script setup>
 
   import { Head } from '@inertiajs/vue3';
-  import Swal from 'sweetalert2';
   import { InertiaProgress } from '@inertiajs/progress'
   import AdminSidebar from '@/Components/AdminSidebar.vue'
   import AdminNavbar from '@/Components/AdminNavbar.vue'
+  import AdminFooter from '@/Components/AdminFooter.vue';
   import '@/../css/admin.css' // AdminLTE CSS
-  import '@/admin.js' // AdminLTE CSS
+  import '@/admin.js' // AdminLTE JS
   const props = defineProps(['title'])
 
   InertiaProgress.init({
@@ -28,8 +28,6 @@
       <title>{{ props.title }}</title>
       <!-- Google Font: Source Sans Pro -->
       <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-      <!-- Font Awesome -->
-      <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
     </Head>
     <div class="wrapper">
       <AdminNavbar/>
@@ -52,6 +50,7 @@
           </div>
         </div>
       </div>
+      <AdminFooter/>
     </div>
 
 </template>

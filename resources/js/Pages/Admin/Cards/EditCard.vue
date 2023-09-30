@@ -1,7 +1,6 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { ref } from 'vue';
-import useToast from '@/hooks/toast';
 import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps(['card']);
@@ -46,7 +45,7 @@ const submit = () => {
     <form ref="form" enctype="multipart/form-data" method="POST" @submit.prevent="submit"
       class="shadow-sm bg-white rounded-3 p-3 d-flex gap-3 position-relative">
       <div class="card-image position-relative" @click="openFileInput">
-        <img :src="`/images/small/${card.image}`" height="152" width="121" ref="cardImage" alt="Card Image"
+        <img :src="`../../images/small/${card.image}`" height="152" width="121" ref="cardImage" alt="Card Image"
           class="rounded-3">
         <input type="file" hidden ref="fileInput" name="image" @change="handleFileChange">
         <i class="fa fa-pen edit-image"></i>

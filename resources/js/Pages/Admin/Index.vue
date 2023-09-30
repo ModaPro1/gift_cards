@@ -4,8 +4,9 @@
   import { ref, watch } from 'vue';
   import { throttle } from "lodash";
   import Swal from 'sweetalert2';
+  import useToast from '@/hooks/toast';
 
-  const props = defineProps(['users', 'usersCount', 'ordersCount', 'contactCount', 'searchVal'])
+  const props = defineProps(['users', 'usersCount', 'ordersCount', 'contactCount', 'searchVal', 'success'])
   const searchVal = ref(props.searchVal || '')
   const searchForm = useForm({
     search: ''
@@ -17,6 +18,7 @@
     searchForm.search = searchVal.value
     searchForm.get(route('admin.index'), {
       preserveState: true,
+      preserveScroll: true,
     })
   }, 1000)
 
@@ -57,6 +59,9 @@
     })
   }
 
+  if(props.success) {
+    useToast('success', props.success)
+  }
 </script>
 
 
@@ -163,10 +168,10 @@
         </div>
       </div>
       <div class="footer p-3 bg-grey d-flex justify-content-between flex-wrap">
-        <button class="btn btn-outline-primary">
+        <Link :href="route('admin.addUser')" class="btn btn-outline-primary">
           <i class="fas fa-user-plus me-1"></i>
           Add
-        </button>
+        </Link>
         <div v-if="props.users.links.length > 3">
           <ul class="pagination m-0 ml-auto">
             <li class="page-item" v-for="link in props.users.links" :class="{ active: link.active, disabled: link.url == null }">

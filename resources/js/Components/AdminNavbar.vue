@@ -3,11 +3,11 @@ import { Link, usePage } from '@inertiajs/vue3';
 const page = usePage()
 
 function calculateDiff(notification) {
-  if(notification.daysAgo > 0) {
+  if (notification.daysAgo > 0) {
     return `${notification.daysAgo} ${notification.daysAgo > 1 ? 'days' : 'day'} ago`
-  } else if(notification.hoursAgo > 0) {
+  } else if (notification.hoursAgo > 0) {
     return notification.hoursAgo + 'hr ago'
-  }else if(notification.minutesAgo > 0) {
+  } else if (notification.minutesAgo > 0) {
     return notification.minutesAgo + 'min ago'
   } else {
     return 'now'
@@ -26,43 +26,38 @@ function calculateDiff(notification) {
           </li>
         </ul>
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item dropdown ml-auto">
+          <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
-              <i class="far fa-comments"></i>
+              <i class="far fa-bell"></i>
               <span class="badge badge-danger navbar-badge">{{ page.props.notificationsCount }}</span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right" style="left: inherit; right: 0px;">
-              <Link
-                :class="{'unseen': !notification.seen}"
+              <span class="dropdown-item dropdown-header">Notifications</span>
+              <div class="dropdown-divider"></div>
+              <Link :class="{ 'unseen': !notification.seen }"
                 v-if="page.props.notifications && page.props.notifications.length > 0"
                 v-for="notification in page.props.notificationsData.slice(0, 3)"
                 :href="notification.type == 'order' ? route('admin.order', notification.id) : route('admin.contact', notification.id)"
                 class="dropdown-item position-relative">
-                <div class="media" v-if="notification.type == 'order'">
-                  <div class="media-body">
-                    <h3 class="dropdown-item-title">
-                      {{ notification.user.name }}
-                    </h3>
-                    <p class="text-sm">This User Bought ${{ notification.card.price }} {{ notification.card.name }} Card</p>
-                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> {{ calculateDiff(notification) }}</p>
-                  </div>
+
+                <div v-if="notification.type == 'order'">
+                  <i class="fas fa-shopping-cart mr-2"></i>
+                  new order
+                  <span class="float-right text-muted text-sm">{{ calculateDiff(notification) }}</span>
                 </div>
-                <div class="media" v-else>
-                  <div class="media-body">
-                    <h3 class="dropdown-item-title">
-                      {{ notification.user.name }}
-                    </h3>
-                    <p class="text-sm">Sent you a message, go and check it out</p>
-                    <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> {{ calculateDiff(notification) }}</p>
-                  </div>
+                
+                <div v-else>
+                  <i class="fas fa-envelope mr-2"></i>
+                  new message
+                  <span class="float-right text-muted text-sm">{{ calculateDiff(notification) }}</span>
                 </div>
+
               </Link>
-              <div v-else class="dropdown-item position-relative">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">No Notifications Yet.</h3>
-                </div>
-              </div>
-              <Link v-if="page.props.notifications && page.props.notifications.length > 0" :href="route('admin.notifications')" class="dropdown-item dropdown-footer">See All Messages</Link>
+              <Link v-else href="#" class="dropdown-item position-relative">
+                No Notifications Yet
+              </Link>
+              <div class="dropdown-divider"></div>
+              <Link :href="route('admin.notifications')" class="dropdown-item dropdown-footer">See All Notifications</Link>
             </div>
           </li>
         </ul>
@@ -72,23 +67,23 @@ function calculateDiff(notification) {
 </template>
 
 <style scoped>
-  .unseen {
-    position: relative;
-    padding-right: 14px;
-  }
-  .unseen::after {
-    content: '';
-    width: 10px;
-    height: 10px;
-    position: absolute;
-    background-color: #0766FF;
-    border-radius: 50%;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
+.unseen {
+  padding-right: 25px !important;
+}
 
-  .navbar-badge {
-    font-size: 11px;
-  }
+.unseen::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  background-color: #0766FF;
+  border-radius: 50%;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.navbar-badge {
+  font-size: 11px;
+}
 </style>

@@ -17,8 +17,8 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="p-3 flex intro-container">
                   <div class="imgs">
-                    <img src="images/pubg.webp" class="img1" alt="PUBG"/>
-                    <img src="images/razer.webp" class="img2" alt="RAZER"/>
+                    <img src="images/pubg.webp" width="250" height="267" class="img1" alt="PUBG"/>
+                    <img src="images/razer.webp" width="250" height="267" class="img2" alt="RAZER"/>
                   </div>
                   <div class="mt-3 intro">
                     <h3 class="font-extrabold text-xl lg:text-4xl md:text-2xl">Welcome To <span class="text-amber-400">Gift Cards</span></h3>

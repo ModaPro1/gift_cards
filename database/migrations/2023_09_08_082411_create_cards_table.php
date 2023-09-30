@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('type', 30);
             $table->string('image', 30);
             $table->integer('price');
-            $table->foreignId('category_id')->references('id')->on('categories');
+            $table->foreignId('category_id')->references('id')->on('categories')->cascadeOnDelete();
             $table->timestamps();
         });
     }

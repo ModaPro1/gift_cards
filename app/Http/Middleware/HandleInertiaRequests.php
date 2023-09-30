@@ -47,7 +47,7 @@ class HandleInertiaRequests extends Middleware
     $unreadNotifications = [];
 
     if ($user) {
-      $orders = $user->orders;
+      $orders = $user->orders->where('status', '!=', 'unpaid');
       $hasOrders = count($orders) > 0;
     } else {
       // Handle the case where the user is not authenticated

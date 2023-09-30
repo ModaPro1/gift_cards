@@ -1,12 +1,17 @@
 <script setup>
   import AdminLayout from '@/Layouts/AdminLayout.vue';
+  import useToast from '@/hooks/toast';
   import { Link } from '@inertiajs/vue3';
-  const props = defineProps(['user', 'ordersCount', 'successMessage'])
+  const props = defineProps(['user', 'ordersCount', 'success'])
+
+  if(props.success) {
+    useToast('success', props.success)
+  }
 
 </script>
 
 <template>
-  <AdminLayout :successMessage="successMessage" :title="`Show User (${props.user.id})`">
+  <AdminLayout :title="`Show User (${props.user.id})`">
     <div class="bg-white rounded-2 p-2">
       <div class="input-box mb-2">
         <label for="name">Name</label>
